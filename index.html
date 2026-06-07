@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empresar | Gestão Financeira Inteligente</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div id="tela-acesso">
+        <header class="header-inicial">
+            <div class="logo">Empresar</div>
+        </header>
+
+        <main class="hero-container">
+            <section class="info-section">
+                <h1>A plataforma definitiva para a saúde financeira do seu negócio.</h1>
+                <p>O <strong>Empresar</strong> foi desenvolvido para transformar a maneira como você enxerga suas finanças. Chega de planilhas complexas e anotações perdidas. Nossa tecnologia oferece uma visão clara e em tempo real sobre o que realmente importa: o seu lucro.</p>
+                
+                <div class="detalhes-lista">
+                    <div class="item-lista">
+                        <strong>📊 Gestão de Finanças:</strong> Controle cada centavo que entra e sai da sua empresa com apenas alguns cliques.
+                    </div>
+                    <div class="item-lista">
+                        <strong>📉 Controle de Despesas:</strong> Identifique gastos desnecessários e otimize seus custos de produção imediatamente.
+                    </div>
+                    <div class="item-lista">
+                        <strong>🛡️ Segurança Blindada:</strong> Protegemos seus dados com autenticação em duas etapas (2FA) via código exclusivo.
+                    </div>
+                    <div class="item-lista">
+                        <strong>👥 Equipe Organizada:</strong> Gerencie seus colaboradores, cargos e salários em um painel unificado.
+                    </div>
+                </div>
+                <div class="selo-seguranca">Sistema de Segurança 2FA Ativo</div>
+            </section>
+
+            <section class="auth-section">
+                <div class="card-auth">
+                    <div class="tab-menu" id="abas">
+                        <button id="tab-login" class="active" onclick="alternarForm('login')">Entrar</button>
+                        <button id="tab-cadastro" onclick="alternarForm('cadastro')">Cadastrar</button>
+                    </div>
+
+                    <form id="formLogin">
+                        <div class="input-group">
+                            <label>E-mail Corporativo</label>
+                            <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                            <span id="erroEmail" class="msg-erro" style="display:none;">E-mail não cadastrado.</span>
+                        </div>
+                        <div class="input-group">
+                            <label>Senha</label>
+                            <input type="password" required placeholder="Digite sua senha">
+                        </div>
+                        <button type="submit" class="btn-principal">Receber Código de Acesso</button>
+                    </form>
+
+                    <form id="formCadastro" style="display: none;">
+                        <div class="input-group">
+                            <label>Nome da Empresa</label>
+                            <input type="text" id="nomeEmpresa" placeholder="Ex: Logística S.A." required>
+                        </div>
+                        <div class="input-group">
+                            <label>E-mail</label>
+                            <input type="email" id="cadEmail" placeholder="contato@empresa.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Crie uma Senha</label>
+                            <input type="password" required>
+                        </div>
+                        <div class="termos-container">
+                            <div class="texto-termos">
+                                O Empresar garante a privacidade dos seus dados. Ao clicar, você concorda com os termos de uso e a política de segurança de dados financeiros.
+                            </div>
+                            <div class="checkbox-area">
+                                <input type="checkbox" id="checkTermos" required>
+                                <label for="checkTermos">Li e concordo com os termos.</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-principal">Criar Conta Agora</button>
+                    </form>
+
+                    <div id="telaCodigo" style="display: none; text-align: center;">
+                        <h2>Verificação</h2>
+                        <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Digite o código enviado para seu e-mail.</p>
+                        <input type="text" maxlength="6" id="inputCodigo" class="input-code-style" placeholder="000000">
+                        <button onclick="validarCodigo()" class="btn-principal">Confirmar Código</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="area-logada" style="display: none;">
+        <div class="dashboard-wrapper">
+            <aside class="sidebar">
+                <div class="logo">Empresar</div>
+                <nav>
+                    <a href="#" class="active">📊 Dashboard</a>
+                    <a href="#" onclick="location.reload()">🚪 Sair</a>
+                </nav>
+            </aside>
+
+            <main class="main-content">
+                <header class="dash-header">
+                    <h2>Painel de Controle Financeiro</h2>
+                </header>
+
+                <section class="cards-financeiros">
+                    <div class="mini-card">
+                        <div class="dot verde"></div>
+                        <div class="txt"><span>Lucros (Entradas)</span><h3 id="card-lucro">R$ 0,00</h3></div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="dot vermelho"></div>
+                        <div class="txt"><span>Despesas (Gastos)</span><h3 id="card-gasto">R$ 0,00</h3></div>
+                    </div>
+                    <div id="status-total" class="total-box azul">
+                        <span>Saldo Total Acumulado</span>
+                        <h3 id="card-total">R$ 0,00</h3>
+                    </div>
+                </section>
+
+                <div class="grid-middle">
+                    <div class="box-grafico">
+                        <h3>Evolução do Patrimônio</h3>
+                        <div class="chart-container"><canvas id="graficoEvolucao"></canvas></div>
+                    </div>
+                    <div class="box-lancamento">
+                        <h3>Registrar Movimentação</h3>
+                        <div class="field">
+                            <label>Valor (R$)</label>
+                            <input type="number" id="valorInput" placeholder="0.00">
+                        </div>
+                        <div class="field">
+                            <label>Tipo</label>
+                            <select id="tipoInput">
+                                <option value="lucro">↑ Lucro/Entrada</option>
+                                <option value="gasto">↓ Gasto/Despesa</option>
+                            </select>
+                        </div>
+                        <button onclick="adicionarRegistro()" class="btn-registrar">Atualizar Dados</button>
+                    </div>
+                </div>
+
+                <section class="section-funcionarios">
+                    <div class="func-header">
+                        <h3>Gestão de Funcionários</h3>
+                        <button onclick="abrirModal()" class="btn-add-func">+ Novo Colaborador</button>
+                    </div>
+                    <table id="tabelaFuncionarios">
+                        <thead>
+                            <tr><th>Nome</th><th>Cargo</th><th>Telefone</th><th>Salário</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="modalFunc" class="modal">
+        <div class="modal-content">
+            <h3>Cadastrar Funcionário</h3>
+            <input type="text" id="funcNome" placeholder="Nome Completo">
+            <input type="text" id="funcCargo" placeholder="Cargo">
+            <input type="text" id="funcTel" placeholder="Telefone">
+            <input type="number" id="funcSalario" placeholder="Salário mensal">
+            <div class="modal-actions">
+                <button onclick="fecharModal()" class="btn-cancel">Cancelar</button>
+                <button onclick="salvarFuncionario()" class="btn-save">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
